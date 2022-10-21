@@ -3,8 +3,8 @@ package boletin6_3;
 
 
 public class Circulo {
-    double radio;
-    final double PI = 3.14;
+    private double radio;
+    public static final double PI = 3.14;
     
     
     public Circulo() {

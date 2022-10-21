@@ -8,9 +8,6 @@ public class CondicionalSimple {
         if(edad>=18){
             System.out.println("Es mayor de edad");
         }
-        else{
-            System.out.println("Es gay");
-        }
        
         System.out.println("Acaba el if ");
     }

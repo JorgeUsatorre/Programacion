@@ -1,15 +1,14 @@
 
-package ejemplocondicionales;
+package ejemplocondicionales2;
 
 import javax.swing.JOptionPane;
 
 
-public class EjemploCondicionales {
+public class EjemploCondicionales2 {
 
 
     public static void main(String[] args) {
-        
- //CondicionalSimple obx = new CondicionalSimple();
+        //CondicionalSimple obx = new CondicionalSimple();
         // obx.mayorEdad();
         // obx.mayorEdad(89);
         
@@ -22,10 +21,10 @@ public class EjemploCondicionales {
         //int ed = Integer.parseInt( JOptionPane.showInputDialog("Edad"));
         
         // llamo al condicional multiple
-        CondicionalMultiple obx = new CondicionalMultiple();
+        CondicionalesMultiples obx = new CondicionalesMultiples();
         //obx.consultarEdad(ed);
-            int ed = pedirInt("Dame un valor de edad");
-            obx.consultarEdad(ed);
+            int dia = pedirInt("Numero del día");
+            obx.consultarDiaSwutch(dia);
         
     }
     
@@ -35,9 +34,7 @@ public class EjemploCondicionales {
     }
     
     public void ver() {
-        int respuesta = pedirInt("Dame valor");
-        System.out.println(respuesta);
+        pedirInt("dame valor");
         
     }
 }
-  

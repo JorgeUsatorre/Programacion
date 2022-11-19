@@ -26,7 +26,7 @@ public class Numeros {
     
     else { 
             System.out.println("El numero 2 es el mismo que el numero 1");
-                
+            break;
         }
     }
     

@@ -7,24 +7,38 @@ import javax.swing.JOptionPane;
 public class Numeros {
     private int numero1;
     private int numero2 = (int)(Math. random()*50+1);;
-    
+    private int distancia;
+
     
     public void juegoNumeros (){
         while(numero1<1 || numero1<50){
             numero1 = Integer.parseInt(JOptionPane.showInputDialog("Jugador 1 Teclee el numero"));
             
-    if(numero1>numero2){
-                System.out.println("El numero 2 es menor que el numero 1");
+            
+            int distancia = Math.abs(numero1-numero2);
+            
+            
+    if(distancia<50&&distancia>20){
+                System.out.println("Moi lonxe");
     }
     
-    else if (numero1<numero2){
-                System.out.println("El numero 2 es mayor que el numero 1");
+    else if (distancia>=10 && distancia<=20){
+                System.out.println("Lonxe");
     }
     
-    else { 
-            System.out.println("El numero 2 es el mismo que el numero 1");
-            break;
-        }
+    else if (distancia<10 && distancia>5){
+                System.out.println("Preto");
+    }
+    
+    else if(distancia<=5 && distancia>=1){ 
+            System.out.println("Moi preto");
+    }
+    else if(distancia<=0){
+        System.out.println("Es el mismo numero");
+        break;
+        
+    }
+
     }
             
     }

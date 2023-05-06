@@ -17,8 +17,8 @@ public class Aplicacion {
      */
     public static void main(String[] args) {
         
-        File f = new File("contratados.txt");
-        File e = new File("destajados.txt");
+        File f = new File("EmplContrat.txt");
+        File e = new File("EmDest.txt");
         
         
         

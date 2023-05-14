@@ -266,6 +266,8 @@ public class BaseDatos extends javax.swing.JFrame {
 
     private void jToggleButtonDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonDesconectarActionPerformed
 
+        ConexionBD con = new ConexionBD();
+        con.establecerConexion();
         
         VentanaBD ventanaSiguiente = new VentanaBD();
 

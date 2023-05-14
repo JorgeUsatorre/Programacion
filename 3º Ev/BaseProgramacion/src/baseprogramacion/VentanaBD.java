@@ -7,14 +7,15 @@ package baseprogramacion;
 import com.sun.jdi.connect.spi.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Jorge
  */
 public class VentanaBD extends javax.swing.JFrame {
-
-   PreparedStatement ps;
+    
+    PreparedStatement ps;
     ResultSet rs;
     ConexionBD bd = new ConexionBD();
     boolean mod = false; 
@@ -128,6 +129,11 @@ public class VentanaBD extends javax.swing.JFrame {
         jButtonBorrar.setText("Borrar");
 
         jButtonModificar.setText("Modificar");
+        jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarActionPerformed(evt);
+            }
+        });
 
         jButtonEliminar.setText("Eliminar");
         jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -261,14 +267,81 @@ public class VentanaBD extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButtonDesconectarActionPerformed
 
     private void jButtonConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultaActionPerformed
-        // TODO add your handling code here:
+        java.sql.Connection conectar = null;
+         
+       
+        try {
+            
+            conectar =  bd.establecerConexion();
+            String nombre = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS CONSULTAR LOS DATOS");
+            
+            ps = (PreparedStatement) conectar.prepareStatement("SELECT * FROM sqlconection WHERE nombre = ?");
+            ps.setString(1, nombre);
+            
+            rs =ps.executeQuery();
+            JOptionPane.showMessageDialog(null, "CONSULTA REALIZADA CON EXITO");
+            if(rs.next()){
+                jTextFieldNombre.setText(rs.getString("Nombre"));
+                jTextFieldApellido.setText(rs.getString("Apellidos"));
+                jTextFieldDNI.setText(rs.getString("DNI"));
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }  
     }//GEN-LAST:event_jButtonConsultaActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        // TODO add your handling code here:
+       java.sql.Connection conectar = null;
+        String nombre = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS ELEMINAR DE LA BASE DE DATOS");
+       
+        try {
+            
+            conectar =  bd.establecerConexion();
+            
+            ps = (PreparedStatement) conectar.prepareStatement("DELETE FROM sqlconection WHERE nombre = ?");
+            ps.setString(1, nombre);
+            ps.execute();
+            
+            JOptionPane.showMessageDialog(null, "FILA ELIMINADA");
+            jTextFieldNombre.setText("");
+            jTextFieldApellido.setText("");
+            jTextFieldDNI.setText("");
+            
+            
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButtonAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirActionPerformed
+        
+        java.sql.Connection conectar = null;
+         
+       
+        try {
+            
+            conectar =  bd.establecerConexion();
+            
+            ps = (PreparedStatement) conectar.prepareStatement("INSERT INTO baseprog.sqlconection (nombre, apellido, dni) VALUES (?,?,?)");
+            ps.setString(1, jTextFieldNombre.getText());
+            ps.setString(2, jTextFieldApellido.getText());
+            ps.setString(3, jTextFieldDNI.getText());
+            ps.execute();
+            
+            JOptionPane.showMessageDialog(null, "FILA INSERTADA CON EXITO");
+            jTextFieldNombre.setText("");
+            jTextFieldApellido.setText("");
+            jTextFieldDNI.setText("");
+            
+            
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+        
+        
         /*Connection conectar = null;
 
         try {
@@ -296,6 +369,38 @@ public class VentanaBD extends javax.swing.JFrame {
         
     
     }//GEN-LAST:event_jButtonAñadirActionPerformed
+
+    private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
+        java.sql.Connection conectar = null;    
+        
+        if (mod==true){
+        try {
+            
+            conectar =  bd.establecerConexion();
+            
+            ps = (PreparedStatement) conectar.prepareStatement("UPDATE sqlconection set apellidos=?, dni=? WHERE nombre=?");
+            ps.setString(1, jTextFieldApellido.getText());
+            ps.setString(2, jTextFieldDNI.getText());
+            ps.setString(3, nomMod);
+            ps.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "FILA MODIFICADA CON EXITO");
+            jTextFieldNombre.setText("");
+            jTextFieldApellido.setText("");
+            jTextFieldDNI.setText("");
+            
+            mod = false;
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        } 
+        else if (mod==false){
+            nomMod = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS MODIFICAR");
+            mod = true;
+        }
+        
+    }//GEN-LAST:event_jButtonModificarActionPerformed
 
     /**
      * @param args the command line arguments

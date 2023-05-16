@@ -20,7 +20,7 @@ public class BaseProgramacion {
      */
     public static void main(String[] args) {
     
-    BaseDatos nashe = new BaseDatos();
+    VentanaBD nashe = new VentanaBD();
     nashe.setVisible(true);    
         
         

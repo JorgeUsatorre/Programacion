@@ -4,10 +4,24 @@
  */
 package baseprogramacion;
 
-import com.sun.jdi.connect.spi.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.mysql.cj.jdbc.Driver;
+import com.mysql.cj.jdbc.result.ResultSetMetaData;
+import com.mysql.cj.xdevapi.Statement;
+import java.sql.DriverManager;
+import java.sql.*;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,10 +34,13 @@ public class VentanaBD extends javax.swing.JFrame {
     ConexionBD bd = new ConexionBD();
     boolean mod = false; 
     String nomMod = null;
+    Connection conet;
+
     
     
     public VentanaBD() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -104,7 +121,7 @@ public class VentanaBD extends javax.swing.JFrame {
 
         jToggleButtonDesconectar.setBackground(new java.awt.Color(153, 255, 255));
         jToggleButtonDesconectar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jToggleButtonDesconectar.setText("DESCONECTAR");
+        jToggleButtonDesconectar.setText("CONECTAR");
         jToggleButtonDesconectar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jToggleButtonDesconectarActionPerformed(evt);
@@ -127,6 +144,11 @@ public class VentanaBD extends javax.swing.JFrame {
         });
 
         jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
 
         jButtonModificar.setText("Modificar");
         jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
@@ -144,13 +166,10 @@ public class VentanaBD extends javax.swing.JFrame {
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Apellido", "DNI"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
@@ -187,8 +206,8 @@ public class VentanaBD extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jLabel1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jToggleButtonDesconectar, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,153 +273,37 @@ public class VentanaBD extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldDNIActionPerformed
 
     private void jToggleButtonDesconectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButtonDesconectarActionPerformed
+        ConexionBD con = new ConexionBD();
+        con.establecerConexion1();
+        
         BaseDatos ventanaSiguiente = new BaseDatos();
-                
-                // Oculta la ventana actual
-                setVisible(false);
-                
-                // Muestra la siguiente ventana
-                ventanaSiguiente.setVisible(true);
-                
-                // Cierra la ventana actual
-                dispose();
+
+        setVisible(false);
+
+        ventanaSiguiente.setVisible(true);
+
+        dispose();        
     }//GEN-LAST:event_jToggleButtonDesconectarActionPerformed
 
     private void jButtonConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultaActionPerformed
-        java.sql.Connection conectar = null;
-         
-       
-        try {
-            
-            conectar =  bd.establecerConexion();
-            String nombre = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS CONSULTAR LOS DATOS");
-            
-            ps = (PreparedStatement) conectar.prepareStatement("SELECT * FROM sqlconection WHERE nombre = ?");
-            ps.setString(1, nombre);
-            
-            rs =ps.executeQuery();
-            JOptionPane.showMessageDialog(null, "CONSULTA REALIZADA CON EXITO");
-            if(rs.next()){
-                jTextFieldNombre.setText(rs.getString("Nombre"));
-                jTextFieldApellido.setText(rs.getString("Apellidos"));
-                jTextFieldDNI.setText(rs.getString("DNI"));
-            }
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }  
+              
     }//GEN-LAST:event_jButtonConsultaActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-       java.sql.Connection conectar = null;
-        String nombre = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS ELEMINAR DE LA BASE DE DATOS");
-       
-        try {
-            
-            conectar =  bd.establecerConexion();
-            
-            ps = (PreparedStatement) conectar.prepareStatement("DELETE FROM sqlconection WHERE nombre = ?");
-            ps.setString(1, nombre);
-            ps.execute();
-            
-            JOptionPane.showMessageDialog(null, "FILA ELIMINADA");
-            jTextFieldNombre.setText("");
-            jTextFieldApellido.setText("");
-            jTextFieldDNI.setText("");
-            
-            
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        } 
+   
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButtonAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAñadirActionPerformed
-        
-        java.sql.Connection conectar = null;
-         
-       
-        try {
-            
-            conectar =  bd.establecerConexion();
-            
-            ps = (PreparedStatement) conectar.prepareStatement("INSERT INTO baseprog.sqlconection (nombre, apellido, dni) VALUES (?,?,?)");
-            ps.setString(1, jTextFieldNombre.getText());
-            ps.setString(2, jTextFieldApellido.getText());
-            ps.setString(3, jTextFieldDNI.getText());
-            ps.execute();
-            
-            JOptionPane.showMessageDialog(null, "FILA INSERTADA CON EXITO");
-            jTextFieldNombre.setText("");
-            jTextFieldApellido.setText("");
-            jTextFieldDNI.setText("");
-            
-            
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        } 
-        
-        
-        /*Connection conectar = null;
 
-        try {
-            
-            conectar =  bd.establecerConexion();
-            
-            ps = (PreparedStatement) conectar.prepareStatement("INSERT INTO sqlconection (Nombre, Apellidos, DNI) VALUES (?,?,?)");
-            ps.setString(1, tNom.getText());
-            ps.setString(2, tApellido.getText());
-            ps.setString(3, tDNI.getText());
-            ps.execute();
-            
-            JOptionPane.showMessageDialog(null, "FILA INSERTADA CON EXITO");
-            tNom.setText("");
-            tApellido.setText("");
-            tDNI.setText("");
-            
-            
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }  
-        */
-        
-        
-    
     }//GEN-LAST:event_jButtonAñadirActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
-        java.sql.Connection conectar = null;    
-        
-        if (mod==true){
-        try {
-            
-            conectar =  bd.establecerConexion();
-            
-            ps = (PreparedStatement) conectar.prepareStatement("UPDATE sqlconection set apellidos=?, dni=? WHERE nombre=?");
-            ps.setString(1, jTextFieldApellido.getText());
-            ps.setString(2, jTextFieldDNI.getText());
-            ps.setString(3, nomMod);
-            ps.executeUpdate();
-            
-            JOptionPane.showMessageDialog(null, "FILA MODIFICADA CON EXITO");
-            jTextFieldNombre.setText("");
-            jTextFieldApellido.setText("");
-            jTextFieldDNI.setText("");
-            
-            mod = false;
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        } 
-        else if (mod==false){
-            nomMod = JOptionPane.showInputDialog("ESCRIBE EL NOMBRE DEL USUARIO QUE DESEAS MODIFICAR");
-            mod = true;
-        }
-        
+
     }//GEN-LAST:event_jButtonModificarActionPerformed
+
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -436,7 +339,17 @@ public class VentanaBD extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    /**
+     *
+     * @param nombreTabla
+     * @param Tabla
+     */
+    
+    
+     
+   
+      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAñadir;
     private javax.swing.JButton jButtonBorrar;
